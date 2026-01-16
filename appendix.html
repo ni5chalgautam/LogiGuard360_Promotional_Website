@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appendix - LogiGuard360</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f5ff;
+            --secondary: #ff006e;
+            --accent: #8b5cf6;
+            --dark: #0a0a0f;
+            --card-bg: #1a1a2e;
+            --text: #e0e0e0;
+            --text-dim: #a0a0a0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(0, 245, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 245, 255, 0.1);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .logo i {
+            -webkit-text-fill-color: var(--primary);
+            font-size: 2rem;
+            animation: shield-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shield-pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(0, 245, 255, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(0, 245, 255, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 245, 255, 0.15);
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            margin-top: 70px;
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(139, 92, 246, 0.15));
+            border-radius: 30px;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section p {
+            font-size: 1.4rem;
+            color: var(--text);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .appendix-section {
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            transition: all 0.4s;
+        }
+
+        .appendix-section:hover {
+            border-color: rgba(0, 245, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 245, 255, 0.15);
+        }
+
+        .reference-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .reference-item {
+            background: rgba(0, 245, 255, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .reference-item:hover {
+            background: rgba(0, 245, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .reference-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .reference-content h4 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-content p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .reference-link:hover {
+            color: var(--primary);
+            gap: 0.8rem;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .glossary-term {
+            background: rgba(0, 245, 255, 0.05);
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .glossary-term:hover {
+            border-color: rgba(0, 245, 255, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+
+        .glossary-term h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .glossary-term p {
+            color: var(--text-dim);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(0, 245, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            border-color: rgba(0, 245, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 245, 255, 0.2);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(139, 92, 246, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+        }
+
+        .resource-header h4 {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .resource-description {
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .resource-link-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 245, 255, 0.2);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .resource-link-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 245, 255, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: rgba(0, 245, 255, 0.05);
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: rgba(0, 245, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .stat-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .faq-item {
+            background: rgba(0, 245, 255, 0.05);
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0, 245, 255, 0.4);
+            background: rgba(0, 245, 255, 0.08);
+        }
+
+        .faq-question {
+            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .faq-answer {
+            color: var(--text-dim);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-nav {
+                padding: 0 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body class="lg-shell">
+<aside class="sidebar lg-side-nav" aria-label="Side Navigation">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Navigation</div>
+            
+                <a href="index.html" class="sidebar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+
+                <a href="overview.html" class="sidebar-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Project Overview</span>
+                </a>
+
+                <a href="features.html" class="sidebar-item">
+                    <i class="fas fa-star"></i>
+                    <span>All Features</span>
+                </a>
+
+                <a href="workflow.html" class="sidebar-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>How It Works</span>
+                </a>
+
+                <a href="technology.html" class="sidebar-item">
+                    <i class="fas fa-microchip"></i>
+                    <span>Technology Stack</span>
+                </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Resources</div>
+            
+                <a href="appendix.html" class="sidebar-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Appendix</span>
+                </a>
+        </div>
+    </aside>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <nav class="top-nav lg-top-nav">
+        <div class="nav-left">
+            <a class="logo" href="index.html" aria-label="Go to Home">
+                <i class="fas fa-shield-alt"></i>
+                <span>LogiGuard360</span>
+            </a>
+
+            <div class="search-bar" role="search">
+                <i class="fas fa-search"></i>
+                <input type="text" class="global-search" placeholder="Search pages, features, threats, resources...">
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="overview.html" class="nav-link">Overview</a>
+                <a href="features.html" class="nav-link">Features</a>
+                <a href="workflow.html" class="nav-link">How It Works</a>
+                <a href="technology.html" class="nav-link">Technology</a>
+                <a href="appendix.html" class="nav-link active">Appendix</a>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <a class="login-btn" href="https://YOUR_LOGIN_URL_HERE" target="_blank" rel="noopener">
+                <i class="fas fa-right-to-bracket"></i>
+                <span>Login / Create</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1>📚 Appendix & Resources</h1>
+            <p>Comprehensive references, terminology, statistics, and additional resources for cybersecurity training in logistics</p>
+        </div>
+
+        <!-- Project Statistics -->
+        <div class="appendix-section">
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> Project Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <i class="fas fa-code"></i>
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-cube"></i>
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">3D Environments</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Threat Scenarios</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-number">1,000+</div>
+                    <div class="stat-label">Trained Users</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-number">2-3 hrs</div>
+                    <div class="stat-label">Avg. Training Time</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Pass Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- References -->
+        <div class="appendix-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> References & Citations</h2>
+            <div class="reference-grid">
+                <div class="reference-item">
+                    <span class="reference-number">1</span>
+                    <div class="reference-content">
+                        <h4>NIST Cybersecurity Framework</h4>
+                        <p>National Institute of Standards and Technology (2023). Framework for Improving Critical Infrastructure Cybersecurity, Version 1.1.</p>
+                        <a href="https://www.nist.gov/cyberframework" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <span class="reference-number">2</span>
+                    <div class="reference-content">
+                        <h4>OWASP Top 10</h4>
+                        <p>Open Web Application Security Project (2021). OWASP Top 10 - 2021: The Ten Most Critical Web Application Security Risks.</p>
+                        <a href="https://owasp.org/www-project-top-ten/" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <span class="reference-number">3</span>
+                    <div class="reference-content">
+                        <h4>Cybersecurity in Supply Chain</h4>
+                        <p>Deloitte (2022). "Cybersecurity in the Supply Chain: Managing Third-Party Risk in a Digital Era."</p>
+                        <a href="#" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <span class="reference-number">4</span>
+                    <div class="reference-content">
+                        <h4>VR Training Effectiveness Study</h4>
+                        <p>PwC (2020). "The Effectiveness of Virtual Reality Soft Skills Training in the Enterprise." Research shows 275% increase in confidence to act after VR training.</p>
+                        <a href="#" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <span class="reference-number">5</span>
+                    <div class="reference-content">
+                        <h4>Phishing Attack Statistics</h4>
+                        <p>Verizon (2023). "2023 Data Breach Investigations Report." 74% of all breaches include the human element, with phishing being the most common vector.</p>
+                        <a href="#" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <span class="reference-number">6</span>
+                    <div class="reference-content">
+                        <h4>ISO/IEC 27001 Standard</h4>
+                        <p>International Organization for Standardization (2013). Information technology — Security techniques — Information security management systems.</p>
+                        <a href="#" class="reference-link" target="_blank">
+                            Visit Resource <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glossary -->
+        <div class="appendix-section">
+            <h2 class="section-title"><i class="fas fa-spell-check"></i> Cybersecurity Glossary</h2>
+            <div class="glossary-grid">
+                <div class="glossary-term">
+                    <h4><i class="fas fa-fish"></i> Phishing</h4>
+                    <p>A cyberattack that uses fraudulent emails or messages to trick individuals into revealing sensitive information like passwords or financial data.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-bug"></i> Malware</h4>
+                    <p>Malicious software designed to harm, exploit, or otherwise compromise computer systems, networks, or devices.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-lock"></i> Encryption</h4>
+                    <p>The process of converting information into a coded format to prevent unauthorized access, ensuring data confidentiality.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-shield-alt"></i> Firewall</h4>
+                    <p>A network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-user-secret"></i> Social Engineering</h4>
+                    <p>Psychological manipulation techniques used to trick people into divulging confidential information or performing actions that compromise security.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-key"></i> Two-Factor Authentication</h4>
+                    <p>A security process requiring two different authentication factors to verify user identity, adding an extra layer of protection.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-network-wired"></i> VPN</h4>
+                    <p>Virtual Private Network - creates a secure, encrypted connection over a less secure network, such as the internet.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-bolt"></i> Zero-Day Exploit</h4>
+                    <p>A cyberattack that occurs on the same day a vulnerability is discovered in software, before a fix is available.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-server"></i> DDoS Attack</h4>
+                    <p>Distributed Denial of Service - an attack that overwhelms a system with traffic from multiple sources, making it unavailable.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-user-lock"></i> Access Control</h4>
+                    <p>Security technique that regulates who or what can view or use resources in a computing environment.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-fingerprint"></i> Biometrics</h4>
+                    <p>Authentication method using unique biological characteristics like fingerprints, facial recognition, or iris scans.</p>
+                </div>
+
+                <div class="glossary-term">
+                    <h4><i class="fas fa-database"></i> Data Breach</h4>
+                    <p>Unauthorized access to confidential data, often resulting in the exposure of sensitive personal or corporate information.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Resources -->
+        <div class="appendix-section">
+            <h2 class="section-title"><i class="fas fa-link"></i> Additional Resources</h2>
+
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">🏛️</div>
+                    <h4>CISA - Cybersecurity & Infrastructure Security Agency</h4>
+                </div>
+                <p class="resource-description">
+                    Official U.S. government agency providing cybersecurity guidance, alerts, and resources for organizations of all sizes.
+                </p>
+                <a href="https://www.cisa.gov/" class="resource-link-btn" target="_blank">Visit CISA</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">🎓</div>
+                    <h4>SANS Institute - Security Training</h4>
+                </div>
+                <p class="resource-description">
+                    Leading provider of cybersecurity training and certifications, offering courses on penetration testing, incident response, and more.
+                </p>
+                <a href="https://www.sans.org/" class="resource-link-btn" target="_blank">Visit SANS</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">🔐</div>
+                    <h4>KnowBe4 - Security Awareness Training</h4>
+                </div>
+                <p class="resource-description">
+                    Platform specializing in security awareness training and simulated phishing attacks to test and improve employee resilience.
+                </p>
+                <a href="https://www.knowbe4.com/" class="resource-link-btn" target="_blank">Visit KnowBe4</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">🌐</div>
+                    <h4>A-Frame Documentation</h4>
+                </div>
+                <p class="resource-description">
+                    Official documentation for A-Frame VR framework, providing guides, examples, and API references for building VR experiences.
+                </p>
+                <a href="https://aframe.io/docs/" class="resource-link-btn" target="_blank">Visit Docs</a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">📦</div>
+                    <h4>FreightWaves - Logistics Security News</h4>
+                </div>
+                <p class="resource-description">
+                    Industry publication covering cybersecurity news, trends, and analysis specific to supply chain and logistics operations.
+                </p>
+                <a href="https://www.freightwaves.com/" class="resource-link-btn" target="_blank">Visit FreightWaves</a>
+            </div>
+        </div>
+
+        <!-- FAQs -->
+        <div class="appendix-section">
+            <h2 class="section-title"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-headset"></i>
+                    Do I need a VR headset to use LogiGuard360?
+                </div>
+                <p class="faq-answer">
+                    No! LogiGuard360 is designed to work on desktop browsers, mobile devices, and VR headsets. You can experience the 360° environments using mouse controls on desktop or touch gestures on mobile. VR headsets enhance immersion but are not required.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-clock"></i>
+                    How long does the training take?
+                </div>
+                <p class="faq-answer">
+                    The complete training program takes approximately 2-3 hours, broken into modules that can be completed at your own pace. Each module includes exploration, threat identification, and quiz components.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-certificate"></i>
+                    Will I receive a certificate upon completion?
+                </div>
+                <p class="faq-answer">
+                    Yes! Upon successfully completing all modules and achieving a passing score on the final assessment, you'll receive a digital certificate of completion that can be shared with employers.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-redo"></i>
+                    Can I retake quizzes if I don't pass?
+                </div>
+                <p class="faq-answer">
+                    Absolutely! You can retake quizzes as many times as needed. We encourage learning from mistakes, and each attempt provides immediate feedback to help you improve.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-mobile-alt"></i>
+                    Is LogiGuard360 mobile-friendly?
+                </div>
+                <p class="faq-answer">
+                    Yes! The platform is fully responsive and optimized for smartphones and tablets. The 360° experience works beautifully on mobile devices using gyroscope controls for natural head tracking.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-users-cog"></i>
+                    Can organizations customize the training content?
+                </div>
+                <p class="faq-answer">
+                    Yes
